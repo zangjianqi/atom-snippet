@@ -1,0 +1,84 @@
+{
+    "name": "atur",
+    "displayName": "atur",
+    "description": "atom language",
+    "version": "0.0.1",
+    "publisher": "zangjianqi",
+    "engines": {
+        "vscode": "^1.58.0"
+    },
+    "activationEvents": [
+        "onLanguage:atom"
+    ],
+    "main": "./client/out/extension",
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "atom",
+                "aliases": [
+                    "atom",
+                    "atom"
+                ],
+                "extensions": [
+                    ".atom"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "atom",
+                "scopeName": "source.atom",
+                "path": "./syntaxes/atom.tmLanguage.json",
+                "embeddedLanguages": {
+                    "source.atom": "atom",
+                    "source.css": "css",
+                    "source.js": "javascript"
+                },
+                "tokenTypes": {
+                    "meta.tag string.quoted": "other"
+                }
+            }
+        ],
+        "snippets": [
+            {
+                "language": "javascript",
+                "path": "./snippets/atom.snippet.json"
+            }
+        ],
+        "configuration": {
+            "title": "Atur",
+            "properties": {
+                "atur.trace.server": {
+                    "type": "string",
+                    "enum": [
+                        "off",
+                        "messages",
+                        "verbose"
+                    ],
+                    "default": "off",
+                    "description": "Traces the communication between VS Code and Vue Language Server."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "cd client && npm install && cd .. && npm run compile",
+        "compile": "tsc -b",
+        "watch": "tsc -b -w",
+        "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+        "yaml:syntaxes": "js-yaml ./syntaxes/atom.tmLanguage.yaml >  ./syntaxes/atom.tmLanguage.json"
+    },
+    "devDependencies": {
+        "@types/mocha": "^8.2.3",
+        "@types/node": "^16.4.0",
+        "@typescript-eslint/eslint-plugin": "^4.28.4",
+        "@typescript-eslint/parser": "^4.28.4",
+        "eslint": "^7.31.0",
+        "js-yaml": "^4.1.0",
+        "typescript": "^4.3.5"
+    }
+}
