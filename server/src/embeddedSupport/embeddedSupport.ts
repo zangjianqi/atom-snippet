@@ -1,9 +1,26 @@
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
+import {
+	TokenType
+} from '../languageTypes'
+import {
+	Position,
+	Range
+} from 'vscode-languageserver-types'
 
-import { TextDocument, Position, LanguageService, TokenType, Range } from './languageModes';
+import {
+	TextDocument
+} from 'vscode-languageserver-textdocument'
+
+export type LanguageId =
+  | 'atom'
+  | 'atom-html'
+  | 'css'
+  | 'scss'
+  | 'sass'
+  | 'less'
+  | 'javascript'
+  | 'typescript'
+  | 'tsx'
+  | 'unknown';
 
 export interface LanguageRange extends Range {
 	languageId: string | undefined;

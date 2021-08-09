@@ -1,7 +1,3 @@
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
 
 import { TextDocument } from 'vscode-html-languageservice';
 
@@ -11,10 +7,15 @@ export interface LanguageModelCache<T> {
 	dispose(): void;
 }
 
-export function getLanguageModelCache<T>(maxEntries: number, cleanupIntervalTimeInSec: number, parse: (document: TextDocument) => T): LanguageModelCache<T> {
-	let languageModels: { [uri: string]: { version: number, languageId: string, cTime: number, languageModel: T } } = {};
-	let nModels = 0;
 
+export function getLanguageModelCache<T>(
+	maxEntries: number,
+  	cleanupIntervalTimeInSec: number,
+  	parse: (document: TextDocument) => T
+): LanguageModelCache<T> {
+
+	let languageModels: { [uri: string]: { version: number; languageId: string; cTime: number; languageModel: T } } = {};
+	let nModels = 0;
 	let cleanupInterval: NodeJS.Timer | undefined = undefined;
 	if (cleanupIntervalTimeInSec > 0) {
 		cleanupInterval = setInterval(() => {
@@ -31,7 +32,7 @@ export function getLanguageModelCache<T>(maxEntries: number, cleanupIntervalTime
 	}
 
 	return {
-		get(document: TextDocument): T {
+		get(document: TextDocument) {
 			const version = document.version;
 			const languageId = document.languageId;
 			const languageModelInfo = languageModels[document.uri];
@@ -61,16 +62,15 @@ export function getLanguageModelCache<T>(maxEntries: number, cleanupIntervalTime
 				}
 			}
 			return languageModel;
-
 		},
-		onDocumentRemoved(document: TextDocument) {
+		onDocumentRemoved(document: TextDocument): void {
 			const uri = document.uri;
 			if (languageModels[uri]) {
 				delete languageModels[uri];
 				nModels--;
 			}
 		},
-		dispose() {
+		dispose(): void {
 			if (typeof cleanupInterval !== 'undefined') {
 				clearInterval(cleanupInterval);
 				cleanupInterval = undefined;
@@ -78,5 +78,6 @@ export function getLanguageModelCache<T>(maxEntries: number, cleanupIntervalTime
 				nModels = 0;
 			}
 		}
-	};
+	}
+
 }
